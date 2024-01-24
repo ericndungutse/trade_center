@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import Company from '../model/companyProfile.model.js';
+import Company from '../model/company.model.js';
 import User from '../model/user.model.js';
 import randomPasswordGenerator from '../utils/randomPasswordGenerator.js';
 
