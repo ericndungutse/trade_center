@@ -2,10 +2,9 @@ import jwt from 'jsonwebtoken';
 
 import Company from '../model/company.model.js';
 import User from '../model/user.model.js';
-import randomPasswordGenerator from '../utils/randomPasswordGenerator.js';
 
 const createAndSendToken = (user, statusCode, res) => {
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
@@ -23,7 +22,7 @@ const createAndSendToken = (user, statusCode, res) => {
 
 export const signUp = async (req, res) => {
   try {
-    const entityType = req.body.role;
+    const entityType = req.body.entityType;
     let company, responseMsg;
 
     // Determine Entity type
@@ -41,16 +40,15 @@ export const signUp = async (req, res) => {
     if (isCompany) {
       company = await Company.create({
         name: req.body.name,
-        companyLogo: req.body.companyLogo,
-        sector: req.body.sector,
-        location: req.body.location,
+        role: 'admin',
       });
 
-      // 2) created associated associated user passed in the
+      // 2) create admin associated to the company created
       await User.create({
-        ...req.body,
+        email: req.body.email,
         company: company.id,
-        password: randomPasswordGenerator(),
+        password: 'test12345',
+        role: 'admin',
       });
 
       responseMsg =
@@ -68,6 +66,7 @@ export const signUp = async (req, res) => {
       message: responseMsg,
     });
   } catch (error) {
+    // TODO: HANDLE ERROR
     console.error(error);
   }
 };
@@ -87,19 +86,18 @@ export const login = async (req, res, next) => {
     '+password +verified +active'
   );
 
-  if (user.verified === false || user.active === false) {
+  if (user && (user.verified === false || user.active === false)) {
     return res.status(403).json({
       status: 'fail',
       message: 'Your account is not activated',
     });
   }
 
-  if (user)
-    if (!user || !(await user.correctPassword(password, user.password)))
-      return res.status(401).json({
-        status: 'fail',
-        message: 'Email or password is incorrect',
-      });
+  if (!user || !(await user.correctPassword(password, user.password)))
+    return res.status(401).json({
+      status: 'fail',
+      message: 'Email or password is incorrect',
+    });
 
   // 3) IF EVERYTHING OK, SIGN AND SEND TOKEN TO CLIENT
   createAndSendToken(user, 200, res);

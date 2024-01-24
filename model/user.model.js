@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please tell us your name.'],
   },
 
   company: {
@@ -23,7 +22,7 @@ const userSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['systemadmin', 'company', 'user'],
+    enum: ['systemadmin', 'admin', 'user'],
     default: 'user',
   },
 
@@ -67,5 +66,4 @@ userSchema.methods.correctPassword = async function (
 };
 
 const User = mongoose.model('User', userSchema);
-
 export default User;

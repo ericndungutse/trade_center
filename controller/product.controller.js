@@ -4,23 +4,22 @@ export const createProduct = async (req, res) => {
   try {
     const {
       name,
-      company,
       description,
       attributes,
       inventory,
       thumbnail,
-      cost,
+      producerPrice,
       minOrderQuantity,
     } = req.body;
 
     const newProduct = new Product({
       name,
-      company,
+      company: req.user.company,
       description,
       attributes,
       inventory,
       thumbnail,
-      cost,
+      producerPrice,
       minOrderQuantity,
     });
 
