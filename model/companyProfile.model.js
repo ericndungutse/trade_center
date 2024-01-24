@@ -10,7 +10,7 @@ const companySchema = new mongoose.Schema(
       unique: true,
     },
 
-    type: {
+    sector: {
       type: String,
       enum: ['manufacturing', 'finance', 'technology'],
       required: true,

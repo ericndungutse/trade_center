@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please tell us your name.'],
   },
 
+  company: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+  },
+
   email: {
     type: String,
     required: [true, 'Please provide your email.'],
@@ -18,7 +23,7 @@ const userSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['systemadmin', 'admin', 'user'],
+    enum: ['systemadmin', 'company', 'user'],
     default: 'user',
   },
 
