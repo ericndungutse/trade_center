@@ -1,8 +1,8 @@
-import Company from '../model/companyProfile.model';
-import User from '../model/user.model';
-import randomPasswordGenerator from '../utils/randomPasswordGenerator';
+import Company from '../model/companyProfile.model.js';
+import User from '../model/user.model.js';
+import randomPasswordGenerator from '../utils/randomPasswordGenerator.js';
 
-export default signUp = async () => {
+export const signUp = async (req, res) => {
   try {
     const entityType = req.body.role;
     let company, responseMsg;
@@ -10,6 +10,13 @@ export default signUp = async () => {
     // Determine Entity type
     const isCompany = entityType === 'company';
     const isUser = entityType === 'user';
+
+    // Check if user already exists
+    if (await User.findOne({ email: req.body.email }))
+      return res.status(400).json({
+        status: 'fail',
+        message: 'email already in use.',
+      });
 
     // 1) create company profile
     if (isCompany) {

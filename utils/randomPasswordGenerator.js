@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 function randomPasswordGenerator(length = 8) {
   // Use crypto.randomBytes() for cryptographically strong randomness:
