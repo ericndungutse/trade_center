@@ -30,7 +30,6 @@ export const protect = async (req, res, next) => {
     // 5) GRANT ACCESS (AUTHORIZE)
     req.user = currentUser;
 
-    console.log(req.user);
     next();
   } catch (error) {
     res.status(500).json({
