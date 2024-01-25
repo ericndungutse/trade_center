@@ -8,6 +8,13 @@ const orderSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+
+    // User who placed the order
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+      required: true,
+    },
     // Transaction Reference
     tx_ref: String,
 
