@@ -23,7 +23,7 @@ const createAndSendToken = (user, statusCode, res) => {
 export const signUp = async (req, res) => {
   try {
     const entityType = req.body.entityType;
-    let company, responseMsg;
+    let company, responseMsg, user;
 
     // Determine Entity type
     const isCompany = entityType === 'company';
@@ -44,27 +44,19 @@ export const signUp = async (req, res) => {
       });
 
       // 2) create admin associated to the company created
-      await User.create({
+      user = await User.create({
         email: req.body.email,
         company: company.id,
         password: 'test12345',
         role: 'admin',
       });
-
-      responseMsg =
-        'Company registered successfully! You will be notified once your company is verified.';
     }
 
     if (isUser) {
-      await User.create(req.body);
-      responseMsg =
-        'Registration successfully! Check your email for verification link.';
+      user = await User.create(req.body);
     }
 
-    res.status(201).json({
-      status: 'sucesss',
-      message: responseMsg,
-    });
+    createAndSendToken(user, 203, res);
   } catch (error) {
     // TODO: HANDLE ERROR
     console.error(error);
