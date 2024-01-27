@@ -2,7 +2,7 @@ import Company from '../model/company.model.js';
 
 export const getCompanies = async (req, res) => {
   try {
-    const companies = await Company.find();
+    const companies = await Company.find().populate('products');
 
     res.status(200).json({
       status: 'success',
