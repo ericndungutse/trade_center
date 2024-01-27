@@ -42,5 +42,11 @@ const companySchema = new mongoose.Schema(
   }
 );
 
+companySchema.virtual('products', {
+  ref: 'Product',
+  localField: '_id',
+  foreignField: 'company',
+});
+
 const Company = mongoose.model('Company', companySchema);
 export default Company;
